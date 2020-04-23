@@ -1,6 +1,6 @@
 'use strict';
 
-const generateId = () => `gloMax${Math.round(Math.random() * 1e8).toString(16)}`;
+const generateId = () => `id${Math.round(Math.random() * 1e8).toString(16)}`;
 
 const totalBalance = document.querySelector('.total__balance'),
     totalMoneyIncome = document.querySelector('.total__money-income'),
@@ -104,10 +104,13 @@ const addOperation = (event) => {
 };
 
 const deleteOperation = (event) => {
-    if(event.target.classList.contains('history_delete')) {
+    const target = event.target;
+    if(target.classList.contains('history_delete')) {
+        dbOperation = dbOperation
+            .filter(operation => operation.id !== target.dataset.id);
 
+        init();
     }
-    
 };
 
 const init = () => {
