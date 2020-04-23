@@ -10,39 +10,7 @@ const totalBalance = document.querySelector('.total__balance'),
     operationName = document.querySelector('.operation__name'),
     operationAmount = document.querySelector('.operation__amount');
 
-
-let dbOperation = [
-    {
-        id: '234fs2',
-        description: 'Получил зарплату',
-        amount: 30000,
-    },
-    {
-        id: 'fg24',
-        description: 'Купил куртку',
-        amount: -6412,
-    },
-    {
-        id: 'asd234asd',
-        description: 'Сходил за продуктами',
-        amount: -3500,
-    },
-    {
-        id: 'sdfsf23423',
-        description: 'Купил стройматериалы',
-        amount: -6000,
-    },
-    {
-        id: '2134as',
-        description: 'Заказ на фриланс',
-        amount: 10000,
-    },
-    {
-        id: '5sdf342',
-        description: 'Купил книги',
-        amount: -2890,
-    },
-];
+let dbOperation = JSON.parse(localStorage.getItem('calc')) || [];
 
 const renderOperation = (operation) => {
     const className = operation.amount < 0 ? 'history__item-minus' : 'history__item-plus';
@@ -53,11 +21,10 @@ const renderOperation = (operation) => {
 
     listItem.innerHTML = `${operation.description}
     <span class="history__money">${operation.amount} ₽</span>
-    <button class="history_delete" data-id="${operation.id}">x</button>
+    <button class="history__delete" data-id="${operation.id}">x</button>
     `;
 
     historyList.append(listItem);
-
 };
 
 const updateBalance = () => {
@@ -86,13 +53,14 @@ const addOperation = (event) => {
      if (operationNameValue && operationAmountValue) {
 
         const operation = {
-            id: '',
+            id: generateId(),
             description: operationNameValue,
             amount: +operationAmountValue
         };
 
         dbOperation.push(operation);
         init();
+
         console.log('id: ', dbOperation);
      } else {
          if (!operationNameValue) {operationName.style.borderColor = 'red'};
@@ -105,10 +73,10 @@ const addOperation = (event) => {
 
 const deleteOperation = (event) => {
     const target = event.target;
-    if(target.classList.contains('history_delete')) {
+    if(target.classList.contains('history__delete')) {
         dbOperation = dbOperation
             .filter(operation => operation.id !== target.dataset.id);
-
+        console.log(target.dataset.id);
         init();
     }
 };
@@ -117,6 +85,7 @@ const init = () => {
     historyList.textContent = '';
     dbOperation.forEach(renderOperation);
     updateBalance();
+    localStorage.setItem('calc', JSON.stringify(dbOperation));
 };
 
 form.addEventListener('submit', addOperation);
