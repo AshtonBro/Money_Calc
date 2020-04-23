@@ -43,10 +43,11 @@ let dbOperation = [
 ];
 
 const renderOperation = (operation) => {
-
+    const className = operation.amount < 0 ? 'history__item-minus' : 'history__item-plus';
     const listItem = document.createElement('li');
   
     listItem.classList.add('history__item');
+    listItem.classList.add(className);
 
     listItem.innerHTML = `${operation.description}
     <span class="history__money">${operation.amount} ₽</span>
@@ -57,12 +58,16 @@ const renderOperation = (operation) => {
 
 };
 
-const init = () => {
-    historyList.textContent = '';
+const updateBalance = () => {
+    const resultIncome = dbOperation.filter((item) => item.amount > 0);
+    const resultExpenses = dbOperation.filter((item) => item.amount < 0);
+};
 
-    dbOperation.forEach(elem => {
-        renderOperation(elem);
-    });
+const init = () => {
+
+    historyList.textContent = '';
+    dbOperation.forEach(renderOperation);
+    updateBalance();
 };
 
 init();
