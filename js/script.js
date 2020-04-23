@@ -3,7 +3,7 @@
 const totalBalance = document.querySelector('.total__balance'),
     totalMoneyIncome = document.querySelector('.total__money-income'),
     totalMoneyExpenses = document.querySelector('.total__money-expenses'),
-    historyList = document.querySelector('.history-list'),
+    historyList = document.querySelector('.history__list'),
     form = document.querySelector('#form'),
     operationName = document.querySelector('.operation__name'),
     operationAmount = document.querySelector('.operation__amount');
@@ -42,14 +42,27 @@ let dbOperation = [
     },
 ];
 
-const renderOperation = () => {
+const renderOperation = (operation) => {
 
     const listItem = document.createElement('li');
-
+  
     listItem.classList.add('history__item');
 
-    listItem.innerHTML = ``;
+    listItem.innerHTML = `${operation.description}
+    <span class="history__money">${operation.amount} ₽</span>
+    <button class="history_delete">x</button>
+    `;
+
+    historyList.append(listItem);
 
 };
 
-renderOperation();
+const init = () => {
+    historyList.textContent = '';
+
+    dbOperation.forEach(elem => {
+        renderOperation(elem);
+    });
+};
+
+init();
